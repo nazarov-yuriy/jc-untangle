@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script type="text/javascript" src="conf_glob.js"></script>
+    <script type="text/javascript" src="util.js"></script>
+    <script type="text/javascript" src="control.js"></script>
     <script type="text/javascript" src="main.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css">
     <title></title>
 </head>
 <body>
-<h1 id="congr"></h1>
-<div id="svgContainer"></div>
+    <div id="menu" class="menu_bar">
+        <!--<a class="menu_btn" href="#" onclick="return menu_click();">&lt;</a>-->
+        <a class="menu_btn" href="#" onclick="return new_click();">New</a>
+        <!--<a class="menu_btn" href="#" onclick="return load_click();">Load</a>-->
+        <!--<a class="menu_btn" href="#" onclick="return save_click();">Save</a>-->
+        <a class="menu_btn" href="#" onclick="return solve_click();">Solve</a>
+    </div>
+    <div id="space">
+        <div id="svgContainer" style="width: 100%; height: 800px; cursor: default"></div>
+    </div>
 </body>
 </html>
