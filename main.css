@@ -1,0 +1,28 @@
+div.svgContainer {width: 100%}
+
+.menu_btn {
+    margin: 2px;
+    padding:5px;
+    display: inline-block;
+    text-align: center;
+    width: 100px;
+    background-color: #3030d0;
+    color:#FFF;
+    font-size: 16pt;
+    text-decoration:none;
+}
+a:hover {
+    background-color: #3030ff;
+    text-decoration: underline;
+}
+a:active {
+    background-color: #3030b0;
+}
+
+.menu_bar {
+    background-color: #c8c8c8;
+}
+
+body {
+    margin: 0;
+}

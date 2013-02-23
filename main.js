@@ -5,101 +5,58 @@
  * Time: 22:35
  * To change this template use File | Settings | File Templates.
  */
-var mySvg;
-var container;
 var circles = [];
 var lines = [];
-var rad = 15;
-var tangles = 100501;
-var step = 70;
-var max_i = 5;
-var max_j = 5;
-var stoh = 0.05;
+var already_win = false;
 
-function add_circle(x, y){
-    var start = [];
-    var end   = [];
-    var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    c.setAttribute("cx", x);
-    c.setAttribute("cy", y);
-    c.setAttribute("r", rad);
-    c.setAttribute("fill", "#336699");
-    c.setAttribute("stroke", "black");
-    c.setAttribute("stroke-width", "2");
-
-    c.start = start;
-    c.end   = end;
-
-    c.onmousedown = function(){
-        c.setAttribute("fill", "red");
-
-        for(var i = 0; i< c.start.length; i++){
-            c.start[i].t.setAttribute("fill", "red");
-        }
-
-        for(var i = 0; i< c.end.length; i++){
-            c.end[i].f.setAttribute("fill", "red");
-        }
-        document.onmousemove = function(event){
-            move_circle(c, event.clientX - container.offsetLeft, event.clientY - container.offsetTop);
-        }
-    }
-
-    //c.onmouseup = function(){document.onmousemove = null}
-
-    return c;
-}
-
-function move_circle(c, x, y){
-    c.setAttribute("cx", x);
-    c.setAttribute("cy", y);
-
-    for(var i = 0; i< c.start.length; i++){
-        c.start[i].setAttribute("x1", x);
-        c.start[i].setAttribute("y1", y);
-    }
-
-    for(var i = 0; i< c.end.length; i++){
-        c.end[i].setAttribute("x2", x);
-        c.end[i].setAttribute("y2", y);
-    }
-
-    tangles = 0;
-    for(var i = 0; i<lines.length; i++){
-        var tangle = false;
-        for(var j = 0; j<lines.length; j++){
-            if(i!=j)
-                tangle |= is_tangle(lines[i], lines[j]);
-        }
-        if(tangle){
-            lines[i].setAttribute("stroke", "red");
-            tangles++;
+var statei=0;
+var statej=0;
+function solve(){
+    if(statei<max_i){
+        if(statej<max_j){
+            move_circle(circles[statei][statej], step*(statej+1), step*(statei+1));
+            setTimeout(solve, 50);
+            statej++;
         }else{
-            lines[i].setAttribute("stroke", "black");
+            statej=0;
+            statei++;
+            setTimeout(solve, 50);
         }
+    }else{
+        statej=0;
+        statei=0;
+    }
+    already_win = true;
+}
+
+function WON(){
+    if(!already_win){
+        alert("You WIN!!!");
     }
 }
 
-function add_line(f, t){
-    var c = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    c.setAttribute("x1", f.cx.baseVal.value);
-    c.setAttribute("y1", f.cy.baseVal.value);
-    c.setAttribute("x2", t.cx.baseVal.value);
-    c.setAttribute("y2", t.cy.baseVal.value);
-    c.setAttribute("stroke", "black");
-    c.setAttribute("stroke-width", "2");
+function remove_node(node){
+    if (node) {
+        node.parentNode.removeChild(node);
+    }
+}
 
-    f.start.push(c);
-    t.end.push(c);
-
-    c.f = f;
-    c.t = t;
-
-    mySvg.appendChild(c);
-    return c;
+function clear(){
+    for(var i = 0; i < circles.length; i++){
+        for(var j = 0; j < circles[i].length; j++){
+            remove_node(circles[i][j]);
+        }
+    }
+    for(var i = 0; i < lines.length; i++){
+        remove_node(lines[i]);
+    }
+    circles = [];
+    lines = [];
+    already_win = false;
 }
 
 function gen(){
+    clear();
     circles = new Array(max_i);
     for(var i = 0; i < max_i; i++){
         circles[i] = new Array(max_j);
@@ -173,7 +130,7 @@ window.onload = mLoad;
 document.onmouseup = function(){
     document.onmousemove = null;
     if(tangles==0){
-        document.getElementById("congr").innerText = "You WON!!!";
+        WON();
     }
 
     for(var i = 0; i < max_i; i++){
