@@ -6,6 +6,13 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var val = 0;
+function scale(e){
+    val += e.wheelDelta;
+    var el = document.getElementById("status_text");
+    el.innerHTML = val;
+}
+
 function menu_click(){
     return false;
 }

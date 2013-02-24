@@ -8,6 +8,7 @@
 var circles = [];
 var lines = [];
 var already_win = false;
+var scale = 1;
 
 var statei=0;
 var statej=0;
@@ -53,6 +54,7 @@ function clear(){
     circles = [];
     lines = [];
     already_win = false;
+    scale = 1;
 }
 
 function gen(){
@@ -116,6 +118,23 @@ function is_tangle(a, b){
     return ((v1*v2<0) && (v3*v4<0));
 }
 
+function MouseWheelHandler(e){
+    var mx = e.offsetX;
+    var my = e.offsetY;
+    var factor = e.wheelDelta>0 ? 1.1 : 0.9;
+    for(var i = 0; i < max_i; i++){
+        for(var j = 0; j < max_j; j++){
+            var x = circles[i][j].getAttribute("cx");
+            var y = circles[i][j].getAttribute("cy");
+            move_circle(
+                circles[i][j],
+                mx + (x-mx)*factor,
+                my + (y-my)*factor
+            );
+        }
+    }
+}
+
 function mLoad(){
     container = document.getElementById("svgContainer");
     mySvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -124,6 +143,15 @@ function mLoad(){
     container.appendChild(mySvg);
 
     gen();
+    var myimage = document.getElementById("space");
+    if (myimage.addEventListener) {
+        // IE9, Chrome, Safari, Opera
+        myimage.addEventListener("mousewheel", MouseWheelHandler, false);
+        // Firefox
+        myimage.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+    }
+    // IE 6/7/8
+    else myimage.attachEvent("onmousewheel", MouseWheelHandler);
 }
 
 window.onload = mLoad;
